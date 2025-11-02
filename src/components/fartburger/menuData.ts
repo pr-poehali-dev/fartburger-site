@@ -11,7 +11,7 @@ export const menuData: MenuItem[] = [
     protein: 15,
     fat: 12,
     carbs: 32,
-    imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/baf7a3f6-ceac-47dc-8f31-ac7230ddf3b4.jpg',
   },
   {
     id: 'cheeseburger',
@@ -23,7 +23,7 @@ export const menuData: MenuItem[] = [
     protein: 18,
     fat: 15,
     carbs: 33,
-    imageUrl: 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/85d19cf8-8f68-4896-a331-a9a2a91e0264.jpg',
   },
   {
     id: 'chickenburger',
@@ -35,7 +35,7 @@ export const menuData: MenuItem[] = [
     protein: 20,
     fat: 10,
     carbs: 35,
-    imageUrl: 'https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/db9ef92a-8405-418e-827f-ae62acf2930b.jpg',
   },
   {
     id: 'fartburger',
@@ -47,7 +47,7 @@ export const menuData: MenuItem[] = [
     protein: 22,
     fat: 18,
     carbs: 38,
-    imageUrl: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/1eaf9bc3-b7ae-42a6-b259-5a6a9d1bcfac.jpg',
   },
   {
     id: 'fartburger-chicken',
@@ -59,7 +59,7 @@ export const menuData: MenuItem[] = [
     protein: 25,
     fat: 12,
     carbs: 40,
-    imageUrl: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/30d3c1c6-552d-41cb-94f0-c47a34ac9337.jpg',
   },
   {
     id: 'fries',
@@ -82,7 +82,7 @@ export const menuData: MenuItem[] = [
         ],
       },
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/cd7160bf-99ea-478a-9b12-28b96c153398.jpg',
   },
   {
     id: 'nuggets',
@@ -105,7 +105,7 @@ export const menuData: MenuItem[] = [
         ],
       },
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/0a098a95-8ad8-451f-8c4e-e9eb3241db9b.jpg',
   },
   {
     id: 'pancakes',
@@ -135,7 +135,7 @@ export const menuData: MenuItem[] = [
         ],
       },
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/2babe74c-90cf-4e13-8e9f-ff3eecf07c66.jpg',
   },
   {
     id: 'icecream',
@@ -158,7 +158,7 @@ export const menuData: MenuItem[] = [
         ],
       },
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/58081753-5fcb-4cfe-8f5d-4cef244a53d3.jpg',
   },
   {
     id: 'milkshake',
@@ -180,7 +180,7 @@ export const menuData: MenuItem[] = [
         ],
       },
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/1ef4b039-4ca8-4622-8992-5a49706141cd.jpg',
   },
   {
     id: 'coffee',
@@ -215,7 +215,7 @@ export const menuData: MenuItem[] = [
         ],
       },
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/86ccc59d-7f6e-48f8-aa62-a5ed438323b0.jpg',
   },
   {
     id: 'tea',
@@ -244,7 +244,7 @@ export const menuData: MenuItem[] = [
         ],
       },
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/58268df4-a7a6-46b8-8022-4a1d69a81270.jpg',
   },
   {
     id: 'cola',
@@ -274,7 +274,7 @@ export const menuData: MenuItem[] = [
         ],
       },
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/2d5e9272-858d-42b2-b297-7c47a6925690.jpg',
   },
   {
     id: 'juice',
@@ -304,7 +304,7 @@ export const menuData: MenuItem[] = [
         ],
       },
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/fec51fbe-c5b1-4004-b899-059d38590f43.jpg',
   },
   {
     id: 'water',
@@ -334,7 +334,7 @@ export const menuData: MenuItem[] = [
         ],
       },
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/80742102-34b1-430a-9a14-2657fdc7722c.jpg',
   },
   {
     id: 'mashed-potatoes',
@@ -342,10 +342,10 @@ export const menuData: MenuItem[] = [
     price: 159,
     category: 'special',
     description: 'Домашнее нежное пюре с сочной котлетой. Комфортная еда, как дома.',
-    ingredients: ['Домашнее вкусное пюре с котлетой'],
+    ingredients: ['Котлета'],
     protein: 18,
     fat: 15,
     carbs: 42,
-    imageUrl: 'https://images.unsplash.com/photo-1574484284002-952d92456975?w=400',
+    imageUrl: 'https://cdn.poehali.dev/projects/8e76fad1-d204-4465-b35f-8365569acbaa/files/48203da9-d7a2-4e30-a1a9-99ab05ada98f.jpg',
   },
 ];

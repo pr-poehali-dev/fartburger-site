@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 
 interface FooterProps {
@@ -28,6 +29,16 @@ const Footer = ({
   isAdmin,
   handleAdminLogin,
 }: FooterProps) => {
+  const navigate = useNavigate();
+
+  const handleAdminClick = () => {
+    if (adminLogin === 'XeX' && adminPassword === '18181818') {
+      navigate('/admin');
+    } else {
+      handleAdminLogin();
+    }
+  };
+
   return (
     <footer className="border-t border-[#2a2a2a] mt-16">
       <div className="container mx-auto px-4 py-8">
@@ -92,18 +103,21 @@ const Footer = ({
                       />
                     </div>
                     <Button
-                      onClick={handleAdminLogin}
+                      onClick={handleAdminClick}
                       className="w-full bg-[#d4af37] text-black hover:bg-[#c4a037]"
                     >
-                      Войти
+                      Войти в админ-панель
                     </Button>
                   </div>
                 ) : (
-                  <div className="text-center py-8">
+                  <div className="text-center py-8 space-y-4">
                     <p className="text-green-400 mb-4">Вы вошли как администратор</p>
-                    <p className="text-gray-400 text-sm">
-                      Для полноценной админ-панели потребуется отдельная страница
-                    </p>
+                    <Button
+                      onClick={() => navigate('/admin')}
+                      className="w-full bg-[#d4af37] text-black hover:bg-[#c4a037]"
+                    >
+                      Открыть админ-панель
+                    </Button>
                   </div>
                 )}
               </DialogContent>

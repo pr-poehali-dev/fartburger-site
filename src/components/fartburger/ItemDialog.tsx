@@ -109,49 +109,62 @@ const ItemDialog = ({
                 </div>
               )}
 
-              <div>
-                <Label className="text-gray-300 mb-2 block">Состав (можно убрать)</Label>
-                <div className="space-y-2">
-                  {selectedItem.ingredients.map((ingredient) => (
-                    <div key={ingredient} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={ingredient}
-                        checked={!customization.removedIngredients.includes(ingredient)}
-                        onCheckedChange={() => toggleIngredient(ingredient)}
-                      />
-                      <Label htmlFor={ingredient} className="text-white cursor-pointer flex-1">
-                        {ingredient}
-                      </Label>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-6 w-6 p-0 border-[#d4af37] text-[#d4af37]"
-                          onClick={() => removeIngredient(ingredient)}
-                        >
-                          -
-                        </Button>
-                        <span className="text-white w-4 text-center">
-                          {customization.addedIngredients[ingredient] || 0}
-                        </span>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-6 w-6 p-0 border-[#d4af37] text-[#d4af37]"
-                          onClick={() => addIngredient(ingredient)}
-                        >
-                          +
-                        </Button>
+              {selectedItem.category === 'burgers' ? (
+                <div>
+                  <Label className="text-gray-300 mb-2 block">Состав (можно убрать)</Label>
+                  <div className="space-y-2">
+                    {selectedItem.ingredients.map((ingredient) => (
+                      <div key={ingredient} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={ingredient}
+                          checked={!customization.removedIngredients.includes(ingredient)}
+                          onCheckedChange={() => toggleIngredient(ingredient)}
+                        />
+                        <Label htmlFor={ingredient} className="text-white cursor-pointer flex-1">
+                          {ingredient}
+                        </Label>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-6 w-6 p-0 border-[#d4af37] text-[#d4af37]"
+                            onClick={() => removeIngredient(ingredient)}
+                          >
+                            -
+                          </Button>
+                          <span className="text-white w-4 text-center">
+                            {customization.addedIngredients[ingredient] || 0}
+                          </span>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-6 w-6 p-0 border-[#d4af37] text-[#d4af37]"
+                            onClick={() => addIngredient(ingredient)}
+                          >
+                            +
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                  {Object.keys(customization.addedIngredients).length > 0 && (
+                    <p className="text-xs text-gray-400 mt-2">
+                      +{Object.values(customization.addedIngredients).reduce((a, b) => a + b, 0) * 30}₽ за доп. ингредиенты
+                    </p>
+                  )}
                 </div>
-                {Object.keys(customization.addedIngredients).length > 0 && (
-                  <p className="text-xs text-gray-400 mt-2">
-                    +{Object.values(customization.addedIngredients).reduce((a, b) => a + b, 0) * 30}₽ за доп. ингредиенты
-                  </p>
-                )}
-              </div>
+              ) : (
+                <div>
+                  <Label className="text-gray-300 mb-2 block">Состав</Label>
+                  <div className="space-y-1">
+                    {selectedItem.ingredients.map((ingredient) => (
+                      <p key={ingredient} className="text-white text-sm">
+                        • {ingredient}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="flex items-center justify-between pt-4 border-t border-[#2a2a2a]">
                 <div className="text-3xl font-bold text-[#d4af37]">
