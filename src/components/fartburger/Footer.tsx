@@ -1,0 +1,120 @@
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import Icon from '@/components/ui/icon';
+
+interface FooterProps {
+  supportMessage: string;
+  setSupportMessage: (message: string) => void;
+  handleSupportMessage: () => void;
+  adminLogin: string;
+  setAdminLogin: (login: string) => void;
+  adminPassword: string;
+  setAdminPassword: (password: string) => void;
+  isAdmin: boolean;
+  handleAdminLogin: () => void;
+}
+
+const Footer = ({
+  supportMessage,
+  setSupportMessage,
+  handleSupportMessage,
+  adminLogin,
+  setAdminLogin,
+  adminPassword,
+  setAdminPassword,
+  isAdmin,
+  handleAdminLogin,
+}: FooterProps) => {
+  return (
+    <footer className="border-t border-[#2a2a2a] mt-16">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex gap-4">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="border-[#d4af37] text-[#d4af37]">
+                  <Icon name="MessageCircle" className="mr-2" size={18} />
+                  Поддержка
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-[#1a1a1a] border-[#2a2a2a]">
+                <DialogHeader>
+                  <DialogTitle className="text-[#d4af37]">Техподдержка</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <Textarea
+                    placeholder="Опишите вашу проблему..."
+                    value={supportMessage}
+                    onChange={(e) => setSupportMessage(e.target.value)}
+                    className="bg-[#0a0a0a] border-[#2a2a2a] text-white min-h-[120px]"
+                  />
+                  <Button
+                    onClick={handleSupportMessage}
+                    className="w-full bg-[#d4af37] text-black hover:bg-[#c4a037]"
+                  >
+                    Отправить
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost" className="text-gray-500 hover:text-[#d4af37]">
+                  <Icon name="Lock" className="mr-2" size={18} />
+                  Админ
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-[#1a1a1a] border-[#2a2a2a]">
+                <DialogHeader>
+                  <DialogTitle className="text-[#d4af37]">Вход администратора</DialogTitle>
+                </DialogHeader>
+                {!isAdmin ? (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-gray-300">Логин</Label>
+                      <Input
+                        value={adminLogin}
+                        onChange={(e) => setAdminLogin(e.target.value)}
+                        className="bg-[#0a0a0a] border-[#2a2a2a] text-white mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-gray-300">Пароль</Label>
+                      <Input
+                        type="password"
+                        value={adminPassword}
+                        onChange={(e) => setAdminPassword(e.target.value)}
+                        className="bg-[#0a0a0a] border-[#2a2a2a] text-white mt-1"
+                      />
+                    </div>
+                    <Button
+                      onClick={handleAdminLogin}
+                      className="w-full bg-[#d4af37] text-black hover:bg-[#c4a037]"
+                    >
+                      Войти
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-green-400 mb-4">Вы вошли как администратор</p>
+                    <p className="text-gray-400 text-sm">
+                      Для полноценной админ-панели потребуется отдельная страница
+                    </p>
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          <p className="text-gray-500 text-sm">© 2024 FartBurger. Все права защищены.</p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
