@@ -1,0 +1,32 @@
+{
+  "tests": [
+    {
+      "name": "Create support message",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "user_name": "Test User",
+        "message": "Test support message"
+      },
+      "expectedStatus": 201,
+      "expectedBody": {
+        "success": true,
+        "message": {
+          "user_name": "string",
+          "message": "string"
+        }
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get all support messages",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "messages": "array"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

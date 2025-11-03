@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { toast } from 'sonner';
 
+const SUPPORT_API_URL = 'https://functions.poehali.dev/a18e01da-bb75-405c-82b6-c91fd6bd9f01';
+
 interface SupportMessage {
   id: number;
   user_name: string;
@@ -24,44 +26,41 @@ const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [messages, setMessages] = useState<SupportMessage[]>([
-    {
-      id: 1,
-      user_name: 'Иван',
-      message: 'Не могу оформить заказ, выдает ошибку при оплате',
-      admin_response: null,
-      status: 'pending',
-      created_at: '2024-11-02T10:30:00',
-      responded_at: null,
-    },
-    {
-      id: 2,
-      user_name: 'Мария',
-      message: 'Как долго доставка обычно занимает?',
-      admin_response: 'Обычно доставка занимает 30-45 минут в пределах города',
-      status: 'answered',
-      created_at: '2024-11-02T09:15:00',
-      responded_at: '2024-11-02T09:20:00',
-    },
-    {
-      id: 3,
-      user_name: 'Гость',
-      message: 'Можно ли использовать несколько промокодов одновременно?',
-      admin_response: null,
-      status: 'pending',
-      created_at: '2024-11-02T11:00:00',
-      responded_at: null,
-    },
-  ]);
+  const [messages, setMessages] = useState<SupportMessage[]>([]);
   const [selectedMessage, setSelectedMessage] = useState<SupportMessage | null>(null);
   const [response, setResponse] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const fetchMessages = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(SUPPORT_API_URL);
+      const data = await response.json();
+      
+      if (data.messages) {
+        setMessages(data.messages);
+      }
+    } catch (error) {
+      console.error('Failed to fetch messages:', error);
+      toast.error('Не удалось загрузить сообщения');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const authStatus = sessionStorage.getItem('adminAuth');
     if (authStatus === 'true') {
       setIsAuthenticated(true);
+      fetchMessages();
     }
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchMessages();
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = () => {
     if (login === 'XeX' && password === '18181818') {
@@ -85,27 +84,38 @@ const Admin = () => {
     setResponse(msg.admin_response || '');
   };
 
-  const handleSendResponse = () => {
+  const handleSendResponse = async () => {
     if (!selectedMessage || !response.trim()) {
       toast.error('Введите ответ');
       return;
     }
 
-    const updatedMessages = messages.map((msg) =>
-      msg.id === selectedMessage.id
-        ? {
-            ...msg,
-            admin_response: response,
-            status: 'answered' as const,
-            responded_at: new Date().toISOString(),
-          }
-        : msg
-    );
+    try {
+      const res = await fetch(SUPPORT_API_URL, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: selectedMessage.id,
+          admin_response: response
+        })
+      });
 
-    setMessages(updatedMessages);
-    toast.success('Ответ отправлен');
-    setSelectedMessage(null);
-    setResponse('');
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        toast.success('Ответ отправлен');
+        setSelectedMessage(null);
+        setResponse('');
+        fetchMessages();
+      } else {
+        toast.error('Ошибка при отправке ответа');
+      }
+    } catch (error) {
+      console.error('Failed to send response:', error);
+      toast.error('Не удалось отправить ответ');
+    }
   };
 
   if (!isAuthenticated) {
@@ -193,20 +203,25 @@ const Admin = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1 space-y-6">
-            <Card className="bg-[#1a1a1a] border-[#2a2a2a] p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-white">Новые сообщения</h2>
-                <Badge className="bg-red-500 text-white">{pendingMessages.length}</Badge>
-              </div>
-              <div className="space-y-3">
-                {pendingMessages.length === 0 ? (
-                  <p className="text-gray-400 text-center py-4">Нет новых сообщений</p>
-                ) : (
-                  pendingMessages.map((msg) => (
-                    <Card
-                      key={msg.id}
+        {loading ? (
+          <div className="text-center py-12">
+            <p className="text-gray-400">Загрузка сообщений...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-1 space-y-6">
+              <Card className="bg-[#1a1a1a] border-[#2a2a2a] p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-white">Новые сообщения</h2>
+                  <Badge className="bg-red-500 text-white">{pendingMessages.length}</Badge>
+                </div>
+                <div className="space-y-3">
+                  {pendingMessages.length === 0 ? (
+                    <p className="text-gray-400 text-center py-4">Нет новых сообщений</p>
+                  ) : (
+                    pendingMessages.map((msg) => (
+                      <Card
+                        key={msg.id}
                       className={`bg-[#0a0a0a] border-[#2a2a2a] p-4 cursor-pointer hover:border-[#d4af37] transition-all ${
                         selectedMessage?.id === msg.id ? 'border-[#d4af37]' : ''
                       }`}
@@ -320,6 +335,7 @@ const Admin = () => {
             )}
           </div>
         </div>
+        )}
       </main>
     </div>
   );

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -6,8 +7,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card } from '@/components/ui/card';
+import { toast } from 'sonner';
 import Icon from '@/components/ui/icon';
 import { CartItem } from './types';
+import { CardPaymentForm } from '@/components/ui/card-payment-form';
+
+const PROMO_API_URL = 'https://functions.poehali.dev/80d8017d-9b41-4d04-aac4-f57f07d23ee9';
 
 interface HeaderProps {
   balance: number;
@@ -27,6 +32,8 @@ interface HeaderProps {
   setTipAmount: (amount: string) => void;
   cartTotal: number;
   handleCheckout: () => void;
+  discount: number;
+  setDiscount: (discount: number) => void;
 }
 
 const Header = ({
@@ -47,8 +54,66 @@ const Header = ({
   setTipAmount,
   cartTotal,
   handleCheckout,
+  discount,
+  setDiscount,
 }: HeaderProps) => {
+  const [cardFormOpen, setCardFormOpen] = useState(false);
+  const [pendingAmount, setPendingAmount] = useState('');
+  const [promoApplied, setPromoApplied] = useState(false);
+
+  const handleQuickTopUp = (amount: number) => {
+    setPendingAmount(amount.toString());
+    setCardFormOpen(true);
+  };
+
+  const handleCustomTopUp = () => {
+    if (topUpAmount && parseInt(topUpAmount) > 0) {
+      setPendingAmount(topUpAmount);
+      setCardFormOpen(true);
+    }
+  };
+
+  const handleCardPaymentSuccess = (amount: number) => {
+    handleTopUp(amount);
+    setTopUpAmount('');
+  };
+
+  const handleApplyPromo = async () => {
+    if (!promoCode.trim()) {
+      toast.error('Введите промокод');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${PROMO_API_URL}?code=${encodeURIComponent(promoCode)}`);
+      const data = await response.json();
+
+      if (data.valid) {
+        setDiscount(data.discount_percent);
+        setPromoApplied(true);
+        toast.success(`Промокод применён! Скидка ${data.discount_percent}%`);
+      } else {
+        toast.error(data.error || 'Промокод не найден');
+        setDiscount(0);
+        setPromoApplied(false);
+      }
+    } catch (error) {
+      toast.error('Ошибка при проверке промокода');
+      console.error('Promo code error:', error);
+    }
+  };
+
+  const discountedTotal = cartTotal - Math.round(cartTotal * discount / 100);
+  const finalTotal = discountedTotal + (parseInt(tipAmount) || 0);
+
   return (
+    <>
+      <CardPaymentForm
+        open={cardFormOpen}
+        onClose={() => setCardFormOpen(false)}
+        onSuccess={handleCardPaymentSuccess}
+        amount={pendingAmount}
+      />
     <header className="sticky top-0 z-50 border-b border-[#2a2a2a] bg-[#0a0a0a]/95 backdrop-blur supports-[backdrop-filter]:bg-[#0a0a0a]/80">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
@@ -74,13 +139,13 @@ const Header = ({
                 </DialogHeader>
                 <div className="space-y-4">
                   <div className="grid grid-cols-3 gap-2">
-                    <Button onClick={() => handleTopUp(100)} variant="outline" className="border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-black">
+                    <Button onClick={() => handleQuickTopUp(100)} variant="outline" className="border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-black">
                       +100₽
                     </Button>
-                    <Button onClick={() => handleTopUp(500)} variant="outline" className="border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-black">
+                    <Button onClick={() => handleQuickTopUp(500)} variant="outline" className="border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-black">
                       +500₽
                     </Button>
-                    <Button onClick={() => handleTopUp(1000)} variant="outline" className="border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-black">
+                    <Button onClick={() => handleQuickTopUp(1000)} variant="outline" className="border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-black">
                       +1000₽
                     </Button>
                   </div>
@@ -92,7 +157,7 @@ const Header = ({
                       onChange={(e) => setTopUpAmount(e.target.value)}
                       className="bg-[#0a0a0a] border-[#2a2a2a] text-white"
                     />
-                    <Button onClick={() => handleTopUp()} className="bg-[#d4af37] text-black hover:bg-[#c4a037]">
+                    <Button onClick={handleCustomTopUp} className="bg-[#d4af37] text-black hover:bg-[#c4a037]">
                       Пополнить
                     </Button>
                   </div>
@@ -163,12 +228,26 @@ const Header = ({
 
                         <div>
                           <Label className="text-gray-300">Промокод</Label>
-                          <Input
-                            placeholder="Введите промокод"
-                            value={promoCode}
-                            onChange={(e) => setPromoCode(e.target.value)}
-                            className="bg-[#0a0a0a] border-[#2a2a2a] text-white mt-1"
-                          />
+                          <div className="flex gap-2 mt-1">
+                            <Input
+                              placeholder="Введите промокод"
+                              value={promoCode}
+                              onChange={(e) => {
+                                setPromoCode(e.target.value);
+                                setPromoApplied(false);
+                                setDiscount(0);
+                              }}
+                              className="bg-[#0a0a0a] border-[#2a2a2a] text-white"
+                            />
+                            <Button
+                              onClick={handleApplyPromo}
+                              variant="outline"
+                              className="border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-black"
+                              disabled={promoApplied}
+                            >
+                              {promoApplied ? '✓' : 'Применить'}
+                            </Button>
+                          </div>
                         </div>
 
                         <div>
@@ -197,10 +276,28 @@ const Header = ({
                         </div>
 
                         <div className="pt-4 space-y-2">
-                          <div className="flex justify-between text-lg">
+                          {discount > 0 && (
+                            <div className="flex justify-between text-sm text-gray-400">
+                              <span>Сумма заказа:</span>
+                              <span>{cartTotal}₽</span>
+                            </div>
+                          )}
+                          {discount > 0 && (
+                            <div className="flex justify-between text-sm text-green-400">
+                              <span>Скидка ({discount}%):</span>
+                              <span>-{Math.round(cartTotal * discount / 100)}₽</span>
+                            </div>
+                          )}
+                          {parseInt(tipAmount) > 0 && (
+                            <div className="flex justify-between text-sm text-gray-400">
+                              <span>Чаевые:</span>
+                              <span>+{tipAmount}₽</span>
+                            </div>
+                          )}
+                          <div className="flex justify-between text-lg border-t border-[#2a2a2a] pt-2">
                             <span className="text-white">Итого:</span>
                             <span className="font-bold text-[#d4af37]">
-                              {cartTotal + (parseInt(tipAmount) || 0)}₽
+                              {finalTotal}₽
                             </span>
                           </div>
                           <Button
@@ -220,6 +317,7 @@ const Header = ({
         </div>
       </div>
     </header>
+    </>
   );
 };
 

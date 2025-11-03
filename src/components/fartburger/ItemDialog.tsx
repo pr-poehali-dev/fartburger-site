@@ -109,43 +109,55 @@ const ItemDialog = ({
                 </div>
               )}
 
-              {selectedItem.category === 'burgers' ? (
+              {(selectedItem.category === 'burgers' || selectedItem.id === 'mashed-potatoes' || selectedItem.id === 'olivier' || selectedItem.id === 'caesar') ? (
                 <div>
-                  <Label className="text-gray-300 mb-2 block">Состав (можно убрать)</Label>
+                  <Label className="text-gray-300 mb-2 block">
+                    {selectedItem.id === 'caesar' ? 'Состав (можно убрать соус)' : 'Состав (можно убрать)'}
+                  </Label>
                   <div className="space-y-2">
-                    {selectedItem.ingredients.map((ingredient) => (
-                      <div key={ingredient} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={ingredient}
-                          checked={!customization.removedIngredients.includes(ingredient)}
-                          onCheckedChange={() => toggleIngredient(ingredient)}
-                        />
-                        <Label htmlFor={ingredient} className="text-white cursor-pointer flex-1">
-                          {ingredient}
-                        </Label>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-6 w-6 p-0 border-[#d4af37] text-[#d4af37]"
-                            onClick={() => removeIngredient(ingredient)}
-                          >
-                            -
-                          </Button>
-                          <span className="text-white w-4 text-center">
-                            {customization.addedIngredients[ingredient] || 0}
-                          </span>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-6 w-6 p-0 border-[#d4af37] text-[#d4af37]"
-                            onClick={() => addIngredient(ingredient)}
-                          >
-                            +
-                          </Button>
+                    {selectedItem.ingredients.map((ingredient) => {
+                      const canRemove = selectedItem.id === 'caesar' ? ingredient === 'Соус Цезарь' : true;
+                      const canAdd = selectedItem.category === 'burgers' || selectedItem.id === 'mashed-potatoes' || selectedItem.id === 'olivier';
+                      
+                      return (
+                        <div key={ingredient} className="flex items-center space-x-2">
+                          {canRemove && (
+                            <Checkbox
+                              id={ingredient}
+                              checked={!customization.removedIngredients.includes(ingredient)}
+                              onCheckedChange={() => toggleIngredient(ingredient)}
+                            />
+                          )}
+                          {!canRemove && <div className="w-4" />}
+                          <Label htmlFor={ingredient} className="text-white cursor-pointer flex-1">
+                            {ingredient}
+                          </Label>
+                          {canAdd && (
+                            <div className="flex items-center gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-6 w-6 p-0 border-[#d4af37] text-[#d4af37]"
+                                onClick={() => removeIngredient(ingredient)}
+                              >
+                                -
+                              </Button>
+                              <span className="text-white w-4 text-center">
+                                {customization.addedIngredients[ingredient] || 0}
+                              </span>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-6 w-6 p-0 border-[#d4af37] text-[#d4af37]"
+                                onClick={() => addIngredient(ingredient)}
+                              >
+                                +
+                              </Button>
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                   {Object.keys(customization.addedIngredients).length > 0 && (
                     <p className="text-xs text-gray-400 mt-2">

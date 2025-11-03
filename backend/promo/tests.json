@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "name": "Check valid promo code",
+      "method": "GET",
+      "path": "/?code=СОСОЧЕК37",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "valid": true,
+        "discount_percent": "number"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Check invalid promo code",
+      "method": "GET",
+      "path": "/?code=INVALID",
+      "expectedStatus": 404,
+      "expectedBody": {
+        "valid": false
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

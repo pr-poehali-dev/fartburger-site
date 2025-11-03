@@ -26,6 +26,7 @@ const Index = () => {
   const [topUpAmount, setTopUpAmount] = useState('');
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [promoCode, setPromoCode] = useState('');
+  const [discount, setDiscount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState<'balance' | 'cash'>('balance');
   const [tipAmount, setTipAmount] = useState('');
   const [adminLogin, setAdminLogin] = useState('');
@@ -39,6 +40,7 @@ const Index = () => {
     { id: 'snacks', label: 'Снеки', icon: 'Cookie' },
     { id: 'desserts', label: 'Десерты', icon: 'IceCream' },
     { id: 'drinks', label: 'Напитки', icon: 'Coffee' },
+    { id: 'salads', label: 'Салаты', icon: 'Salad' },
     { id: 'special', label: 'Особое', icon: 'Star' },
   ];
 
@@ -223,6 +225,8 @@ const Index = () => {
         setTipAmount={setTipAmount}
         cartTotal={cartTotal}
         handleCheckout={handleCheckout}
+        discount={discount}
+        setDiscount={setDiscount}
       />
 
       <main className="container mx-auto px-4 py-8">
